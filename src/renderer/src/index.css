@@ -1,0 +1,537 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@custom-variant platform-win32 (&:is(.platform-win32 *));
+@custom-variant platform-darwin (&:is(.platform-darwin *));
+@custom-variant platform-linux (&:is(.platform-linux *));
+@custom-variant platform-unknown (&:is(.platform-unknown *));
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  /* color: rgba(255, 255, 255, 0.87); */
+  background-color: transparent !important;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --radius: 0.625rem;
+  --background: oklch(0 0 0); /* Changed to black */
+  --foreground: oklch(0.141 0.005 285.823);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.6 0.25 25);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.967 0.02 25);
+  --secondary-foreground: oklch(0.55 0.22 25);
+  --muted: oklch(0.967 0.02 25);
+  --muted-foreground: oklch(0.552 0.1 25);
+  --accent: oklch(0.967 0.02 25);
+  --accent-foreground: oklch(0.55 0.22 25);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.02 25);
+  --input: oklch(0.92 0.02 25);
+  --ring: oklch(0.705 0.15 25);
+  --chart-1: oklch(0.646 0.222 25);
+  --chart-2: oklch(0.6 0.118 15);
+  --chart-3: oklch(0.398 0.07 35);
+  --chart-4: oklch(0.828 0.189 5);
+  --chart-5: oklch(0.769 0.188 45);
+  --sidebar: transparent; /* Changed to transparent for glass effect base */
+  --sidebar-foreground: oklch(0.2 0.1 25);
+  --sidebar-primary: oklch(0.6 0.25 25);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.967 0.02 25);
+  --sidebar-accent-foreground: oklch(0.55 0.22 25);
+  --sidebar-border: oklch(0.92 0.02 25);
+  --sidebar-ring: oklch(0.705 0.15 25);
+
+  --space-background-start: oklch(0.98 0.02 25);
+  --space-background-end: oklch(0.96 0.04 15);
+}
+
+.app-drag {
+  -webkit-app-region: drag;
+}
+
+.remove-app-drag {
+  -webkit-app-region: no-drag;
+}
+
+.user-drag-none {
+  -webkit-user-drag: none;
+}
+
+.dark {
+  --background: oklch(0.05 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.08 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.08 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.6 0.25 25);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.12 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.12 0 0);
+  --muted-foreground: oklch(0.7 0 0);
+  --accent: oklch(0.12 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.552 0.12 25);
+  --chart-1: oklch(0.488 0.243 25);
+  --chart-2: oklch(0.696 0.17 15);
+  --chart-3: oklch(0.769 0.188 35);
+  --chart-4: oklch(0.627 0.265 5);
+  --chart-5: oklch(0.645 0.246 45);
+  --sidebar: rgba(0, 0, 0, 0.05);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.65 0.2 25);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: rgba(0, 0, 0, 0.1);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: rgba(255, 255, 255, 0.02);
+  --sidebar-ring: oklch(0.552 0.12 25);
+  --space-background-start: oklch(0.02 0 0);
+  --space-background-end: oklch(0.01 0 0);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-space-background-start: var(--space-background-start);
+  --color-space-background-end: var(--space-background-end);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Force black background everywhere */
+html, body, #root {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Ensure all containers maintain black background */
+* {
+  box-sizing: border-box;
+}
+
+/* Force black background on all potential white elements */
+div, main, section, article, aside, header, footer, nav {
+  background-color: inherit;
+}
+
+/* Webview and iframe backgrounds */
+webview, iframe {
+  background-color: #000000 !important;
+}
+
+/* Electron specific */
+body.electron {
+  background-color: #000000 !important;
+}
+
+/* Responsive viewport handling */
+@media (max-width: 640px) {
+  .responsive-container {
+    padding: 0.5rem;
+  }
+
+  html, body, #root {
+    background-color: #000000 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-container {
+    padding: 0.25rem;
+  }
+
+  html, body, #root {
+    background-color: #000000 !important;
+  }
+}
+
+/* Ensure search input never disappears */
+.search-container {
+  min-width: 280px !important;
+  max-width: 100% !important;
+}
+
+@media (max-width: 320px) {
+  .search-container {
+    min-width: 260px !important;
+  }
+}
+
+/* Add these styles to hide scrollbars while allowing scroll */
+/* For Webkit browsers (Chrome, Safari) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* For IE, Edge */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+/* You can optionally add a Firefox-specific rule if needed,
+   but scrollbar-width: none; is generally sufficient. */
+/*
+.no-scrollbar {
+  scrollbar-width: none;
+}
+*/
+
+/* Ensure the element itself is still scrollable */
+.no-scrollbar {
+  overflow: auto; /* Or scroll, depending on your needs */
+}
+
+.dimmed-space-background-start {
+  background: linear-gradient(
+    to bottom right,
+    color-mix(in oklab, var(--space-background-start), black 20%),
+    color-mix(in oklab, var(--space-background-start), black 20%)
+  );
+}
+
+.\*\:dimmed-space-background-start {
+  :is(& > *) {
+    background: linear-gradient(
+      to bottom right,
+      color-mix(in oklab, var(--space-background-start), black 20%),
+      color-mix(in oklab, var(--space-background-start), black 20%)
+    );
+  }
+}
+
+/* Dark gradient sidebar */
+.sidebar-red-gradient {
+  background: rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(30px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.02),
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.dark .sidebar-red-gradient {
+  background: rgba(0, 0, 0, 0.05) !important;
+  backdrop-filter: blur(35px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.01),
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Dark gradient backgrounds with subtle red/purple tones */
+.red-gradient-bg {
+  background: linear-gradient(135deg,
+    #1a1a1a 0%,
+    #2d1b2e 25%,
+    #3d1a2e 50%,
+    #2d1b2e 75%,
+    #1a1a1a 100%) !important;
+  position: relative;
+}
+
+.red-gradient-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 60% 40%, rgba(139, 69, 119, 0.15) 0%, transparent 60%),
+              radial-gradient(circle at 20% 80%, rgba(88, 28, 135, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.dark .red-gradient-bg {
+  background: linear-gradient(135deg,
+    #0f0f0f 0%,
+    #1f0f1f 25%,
+    #2f0f1f 50%,
+    #1f0f1f 75%,
+    #0f0f0f 100%) !important;
+}
+
+.dark .red-gradient-bg::before {
+  background: radial-gradient(circle at 60% 40%, rgba(139, 69, 119, 0.2) 0%, transparent 60%),
+              radial-gradient(circle at 20% 80%, rgba(88, 28, 135, 0.15) 0%, transparent 50%);
+}
+
+/* Dark gradient cards with high transparency */
+.red-gradient-card {
+  background: rgba(20, 20, 20, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.red-gradient-card:hover {
+  transform: translateY(-1px);
+  background: rgba(30, 30, 30, 0.6) !important;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .red-gradient-card {
+  background: rgba(15, 15, 15, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.dark .red-gradient-card:hover {
+  background: rgba(25, 25, 25, 0.5) !important;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Red gradient primary elements */
+.red-gradient-primary {
+  background: linear-gradient(135deg, oklch(0.62 0.26 25), oklch(0.52 0.32 15)) !important;
+  color: oklch(0.98 0 0) !important;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.red-gradient-primary:hover {
+  background: linear-gradient(135deg, oklch(0.65 0.28 25), oklch(0.55 0.34 15)) !important;
+  transform: translateY(-1px);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.dark .red-gradient-primary {
+  background: linear-gradient(135deg, oklch(0.52 0.24 25), oklch(0.42 0.27 15)) !important;
+  color: oklch(0.98 0 0) !important;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.dark .red-gradient-primary:hover {
+  background: linear-gradient(135deg, oklch(0.55 0.26 25), oklch(0.45 0.29 15)) !important;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced glass morphism effects */
+.glass-effect {
+  backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(0, 0, 0, 0.1); /* Lowered alpha for more transparency */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-effect {
+  background: rgba(0, 0, 0, 0.2); /* Lowered alpha for more transparency */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Enhanced address bar styling */
+.enhanced-address-bar {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.enhanced-address-bar:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .enhanced-address-bar {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .enhanced-address-bar:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced tab styling */
+.enhanced-tab {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.enhanced-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.enhanced-tab:hover::before {
+  opacity: 1;
+}
+
+.enhanced-tab:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .enhanced-tab:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced scrollbar styling */
+.enhanced-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.enhanced-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.enhanced-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, oklch(0.6 0.2 25), oklch(0.5 0.25 15));
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.enhanced-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, oklch(0.65 0.22 25), oklch(0.55 0.27 15));
+}
+
+.dark .enhanced-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .enhanced-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, oklch(0.4 0.18 25), oklch(0.3 0.22 15));
+}
+
+.dark .enhanced-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, oklch(0.45 0.2 25), oklch(0.35 0.24 15));
+}
+
+/* Enhanced focus states */
+.enhanced-focus:focus-visible {
+  outline: none;
+  ring: 3px;
+  ring-color: oklch(0.6 0.25 25 / 0.3);
+  ring-offset: 2px;
+  ring-offset-color: var(--background);
+}
+
+.dark .enhanced-focus:focus-visible {
+  ring-color: oklch(0.5 0.22 25 / 0.4);
+}
+
+/* Smooth animations for all interactive elements */
+.smooth-interaction {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.smooth-interaction:hover {
+  transform: translateY(-1px);
+}
+
+.smooth-interaction:active {
+  transform: translateY(0) scale(0.98);
+}

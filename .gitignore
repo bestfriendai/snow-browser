@@ -1,0 +1,37 @@
+node_modules
+dist
+dist-*/
+out
+out/
+.DS_Store
+.eslintcache
+*.log*
+
+# Build artifacts
+build/
+*.exe
+*.dmg
+*.AppImage
+*.deb
+*.rpm
+*.snap
+
+# Electron build outputs
+release/
+app/dist/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
