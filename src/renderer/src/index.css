@@ -10,7 +10,7 @@
 @custom-variant platform-unknown (&:is(.platform-unknown *));
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -22,6 +22,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern' 1;
+  font-variant-ligatures: common-ligatures;
 
   --radius: 0.625rem;
   --background: oklch(0 0 0); /* Changed to black */
@@ -67,6 +69,86 @@
 .remove-app-drag {
   -webkit-app-region: no-drag;
 }
+
+/* AI Panel Font Improvements */
+.ai-panel {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  font-variant-ligatures: common-ligatures;
+}
+
+/* Improve text rendering for all elements */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scroll isolation for AI panel */
+.ai-panel-scroll {
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+}
+
+/* Enhanced scrollbar for AI panel messages with red theme */
+.ai-panel-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Remove any text box styling from AI panel messages */
+.ai-panel .message-content-scroll,
+.ai-panel .message-content-scroll *,
+.ai-panel [class*="message"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Ensure AI panel text is pure white without containers */
+.ai-panel .text-white,
+.ai-panel .text-red-200,
+.ai-panel .text-red-300,
+.ai-panel .text-amber-300,
+.ai-panel .text-gray-300,
+.ai-panel .text-blue-300 {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.ai-panel-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ai-panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(239, 68, 68, 0.6);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.ai-panel-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(239, 68, 68, 0.8);
+}
+
+/* Remove message content scrollbar - messages should flow naturally */
+
+.ai-panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 3px;
+}
+
+.ai-panel-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+/* Remove duplicate message content scrollbar styles */
 
 .user-drag-none {
   -webkit-user-drag: none;
@@ -174,14 +256,24 @@ html, body, #root {
   box-sizing: border-box;
 }
 
-/* Force black background on all potential white elements */
-div, main, section, article, aside, header, footer, nav {
+/* Force black background on all potential white elements - but exclude webview content */
+div:not(.webview-content), main, section, article, aside, header, footer, nav {
   background-color: inherit;
 }
 
-/* Webview and iframe backgrounds */
-webview, iframe {
+/* Webview and iframe backgrounds - only for internal pages */
+webview[src*="flow-internal:"], webview[src*="flow:"], webview[src*="snow-internal:"], webview[src*="snow:"] {
   background-color: #000000 !important;
+}
+
+/* Ensure all web content maintains its original background */
+webview[src*="http"], webview[src*="https"], iframe[src*="http"], iframe[src*="https"] {
+  background-color: transparent !important;
+}
+
+/* Don't force backgrounds on webview containers */
+webview {
+  background-color: transparent !important;
 }
 
 /* Electron specific */

@@ -6,7 +6,7 @@ import { TabManager } from "@/browser/tabs/tab-manager";
 import { TabbedBrowserWindow } from "@/browser/window";
 import { cacheFavicon } from "@/modules/favicons";
 import { FLAGS } from "@/modules/flags";
-// import { PATHS } from "@/modules/paths";
+import { PATHS } from "@/modules/paths";
 import { TypedEventEmitter } from "@/modules/typed-event-emitter";
 import { NavigationEntry, Rectangle, Session, WebContents, WebContentsView, WebPreferences } from "electron";
 import { createTabContextMenu } from "@/browser/tabs/tab-context-menu";
@@ -97,10 +97,14 @@ function createWebContentsView(
     scrollBounce: true,
     safeDialogs: true,
     navigateOnDragDrop: true,
-    transparent: true
+    transparent: true,
+
+    // Context isolation and security
+    nodeIntegration: false,
+    contextIsolation: true,
 
     // Provide access to 'flow' globals (replaced by implementation in protocols.ts)
-    // preload: PATHS.PRELOAD
+    preload: PATHS.PRELOAD
   };
 
   const webContentsView = new WebContentsView({
@@ -441,7 +445,7 @@ export class Tab extends TypedEventEmitter<TabEvents> {
     // Enable transparent background for whitelisted protocols
     const WHITELISTED_PROTOCOLS = ["flow-internal:", "flow:", "snow-internal:", "snow:"];
     const COLOR_TRANSPARENT = "#00000000";
-    const COLOR_BACKGROUND = "#000000ff"; // Changed to black instead of white
+    const COLOR_BACKGROUND = "#ffffffff"; // Keep original white background for web content
     this.on("updated", (properties) => {
       if (properties.includes("url") && this.url) {
         const url = URL.parse(this.url);
@@ -450,10 +454,11 @@ export class Tab extends TypedEventEmitter<TabEvents> {
           if (WHITELISTED_PROTOCOLS.includes(url.protocol)) {
             this.view.setBackgroundColor(COLOR_TRANSPARENT);
           } else {
-            this.view.setBackgroundColor(COLOR_BACKGROUND);
+            // For web content, use transparent to let the page set its own background
+            this.view.setBackgroundColor(COLOR_TRANSPARENT);
           }
         } else {
-          // Bad URL
+          // Bad URL - use white background
           this.view.setBackgroundColor(COLOR_BACKGROUND);
         }
       }
