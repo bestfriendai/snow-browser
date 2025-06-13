@@ -85,6 +85,8 @@ export class Omnibox {
         flow.browser.createWindow();
       } else if (pedalAction === "open_extensions") {
         flow.tabs.newTab("snow://extensions", true);
+      } else if (pedalAction === "open_downloads") {
+        flow.tabs.newTab("snow://downloads", true);
       }
     } else {
       const url = autocompleteMatch.destinationUrl;

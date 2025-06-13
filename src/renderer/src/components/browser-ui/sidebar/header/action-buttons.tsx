@@ -3,6 +3,8 @@ import { SIDEBAR_HOVER_COLOR } from "@/components/browser-ui/browser-sidebar";
 import { GoBackButton, GoForwardButton } from "@/components/browser-ui/sidebar/header/navigation-buttons";
 import { RefreshCWIcon, RefreshCWIconHandle } from "@/components/icons/refresh-cw";
 import { useTabs } from "@/components/providers/tabs-provider";
+import { useAI } from "@/components/providers/ai-provider";
+import { AIPanelToggle } from "@/components/browser-ui/ai-panel/ai-panel-toggle";
 import {
   SidebarGroup,
   SidebarMenu,
@@ -97,6 +99,7 @@ function StopLoadingIcon() {
 export function NavigationControls() {
   const { focusedTab } = useTabs();
   const { open, setOpen } = useSidebar();
+  const { isAIPanelOpen, toggleAIPanel } = useAI();
 
   const [entries, setEntries] = useState<NavigationEntryWithIndex[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -169,7 +172,7 @@ export function NavigationControls() {
           <BrowserActionList alignmentY="bottom" alignmentX="right" />
         </SidebarMenuItem>
         {/* Right Side Buttons */}
-        <SidebarMenuItem className="flex flex-row gap-0.5">
+        <SidebarMenuItem className="flex flex-row gap-0.5 relative z-[999999]" style={{ zIndex: 999999, position: 'relative' }}>
           <GoBackButton canGoBack={canGoBack} backwardTabs={entries.slice(0, activeIndex).reverse()} />
           <GoForwardButton canGoForward={canGoForward} forwardTabs={entries.slice(activeIndex + 1)} />
           <AnimatePresence mode="wait" initial={true}>
@@ -183,6 +186,14 @@ export function NavigationControls() {
               />
             )}
           </AnimatePresence>
+          {/* AI Panel Toggle Button */}
+          <div style={{ zIndex: 999999, position: 'relative' }}>
+            <AIPanelToggle
+              isOpen={isAIPanelOpen}
+              onToggle={toggleAIPanel}
+              className={cn(SIDEBAR_HOVER_COLOR, "relative z-[999999]")}
+            />
+          </div>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>

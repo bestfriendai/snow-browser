@@ -22,6 +22,7 @@ import OmniboxDebugRoute from "./routes/omnibox-debug/route";
 import OnboardingRoute from "./routes/onboarding/route";
 import ExtensionsRoute from "./routes/extensions/route";
 import PDFViewerRoute from "./routes/pdf-viewer/route";
+import DownloadsRoute from "./routes/downloads/route";
 
 // Routes //
 function Routes() {
@@ -62,6 +63,9 @@ function Routes() {
       </Route>
       <Route protocol={snowProtocol} hostname="pdf-viewer">
         <PDFViewerRoute />
+      </Route>
+      <Route protocol={snowProtocol} hostname="downloads">
+        <DownloadsRoute />
       </Route>
     </RouterProvider>
   );

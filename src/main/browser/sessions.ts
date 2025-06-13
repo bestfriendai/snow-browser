@@ -69,7 +69,7 @@ function createSession(profileId: string) {
   registerCallbacksWithSession(profileSession);
 
   setupInterceptRules(profileSession);
-  registerPreloadScript(profileSession);
+  // registerPreloadScript(profileSession); // Disabled - using webPreferences.preload instead
 
   return profileSession;
 }
@@ -94,7 +94,7 @@ export const defaultSessionReady = app.whenReady().then(async () => {
   registerSnowInternalProtocol(defaultSession.protocol);
 
   setupInterceptRules(defaultSession);
-  registerPreloadScript(defaultSession);
+  // registerPreloadScript(defaultSession); // Disabled - using webPreferences.preload instead
 
   // wait for 50 ms before returning
   return await sleep(50);

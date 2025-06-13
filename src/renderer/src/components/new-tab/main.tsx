@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Moon, Sun, Search, GlobeIcon } from "lucide-react";
 import { useTheme } from "@/components/main/theme";
 import { QuickLinks } from "./quick-links";
+import { EnhancedFeatures } from "./enhanced-features";
 import { cn } from "@/lib/utils";
 import { Omnibox } from "@/lib/omnibox/omnibox";
 import { AutocompleteMatch } from "@/lib/omnibox/types";
@@ -208,6 +209,11 @@ export function NewTabPage() {
             )}
           </Command>
         </motion.div>
+      </div>
+
+      {/* Enhanced Features */}
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 mb-8">
+        <EnhancedFeatures />
       </div>
 
       {/* Quick Links at the bottom */}

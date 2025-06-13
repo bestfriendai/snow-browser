@@ -249,6 +249,7 @@ html, body, #root {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  overflow-y: hidden; /* Prevent vertical scrolling on main container */
 }
 
 /* Ensure all containers maintain black background */
@@ -259,6 +260,27 @@ html, body, #root {
 /* Force black background on all potential white elements - but exclude webview content */
 div:not(.webview-content), main, section, article, aside, header, footer, nav {
   background-color: inherit;
+}
+
+/* Fix layout container issues */
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Ensure proper flex behavior */
+.flex-container {
+  display: flex;
+  min-height: 0; /* Allow flex items to shrink below content size */
+}
+
+.flex-1 {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
 }
 
 /* Webview and iframe backgrounds - only for internal pages */
@@ -290,6 +312,21 @@ body.electron {
   html, body, #root {
     background-color: #000000 !important;
   }
+
+  /* Adjust AI panel for smaller screens */
+  .ai-panel {
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 9999 !important;
+  }
+
+  /* Hide sidebar on mobile when AI panel is open */
+  .ai-panel-open .sidebar {
+    display: none !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -299,6 +336,16 @@ body.electron {
 
   html, body, #root {
     background-color: #000000 !important;
+  }
+
+  /* Ensure proper mobile layout */
+  .sidebar {
+    width: 100vw !important;
+  }
+
+  .content-area {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
 
@@ -311,6 +358,15 @@ body.electron {
 @media (max-width: 320px) {
   .search-container {
     min-width: 260px !important;
+  }
+
+  /* Ultra-small screen adjustments */
+  .ai-panel {
+    font-size: 14px !important;
+  }
+
+  .sidebar {
+    font-size: 12px !important;
   }
 }
 
@@ -328,18 +384,45 @@ body.electron {
   /* Firefox */
 }
 
-/* You can optionally add a Firefox-specific rule if needed,
-   but scrollbar-width: none; is generally sufficient. */
-/*
-.no-scrollbar {
-  scrollbar-width: none;
-}
-*/
-
 /* Ensure the element itself is still scrollable */
 .no-scrollbar {
   overflow: auto; /* Or scroll, depending on your needs */
 }
+
+/* AI Panel specific scrollbar styling */
+.ai-panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(239, 68, 68, 0.6) transparent;
+}
+
+.ai-panel-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ai-panel-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ai-panel-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(239, 68, 68, 0.6);
+  border-radius: 3px;
+}
+
+.ai-panel-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(239, 68, 68, 0.8);
+}
+
+/* Fix z-index layering issues */
+.z-layer-base { z-index: 1; }
+.z-layer-sidebar { z-index: 10; }
+.z-layer-content { z-index: 20; }
+.z-layer-ai-panel { z-index: 50; }
+.z-layer-modal { z-index: 100; }
+.z-layer-tooltip { z-index: 200; }
+.z-layer-dropdown { z-index: 300; }
+.z-layer-overlay { z-index: 999; }
+.z-layer-portal { z-index: 9999; }
+.z-layer-max { z-index: 2147483647; }
 
 .dimmed-space-background-start {
   background: linear-gradient(
@@ -347,6 +430,64 @@ body.electron {
     color-mix(in oklab, var(--space-background-start), black 20%),
     color-mix(in oklab, var(--space-background-start), black 20%)
   );
+}
+
+/* Additional layout fixes */
+.sidebar-inset {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Prevent layout shifts */
+.prevent-layout-shift {
+  contain: layout style;
+}
+
+/* Smooth transitions for layout changes */
+.layout-transition {
+  transition: margin 0.3s ease, width 0.3s ease, height 0.3s ease;
+}
+
+/* Fix for portal components */
+.portal-container {
+  position: fixed;
+  pointer-events: none;
+}
+
+.portal-container > * {
+  pointer-events: auto;
+}
+
+/* Ensure proper stacking context */
+.stacking-context {
+  position: relative;
+  z-index: 0;
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 768px) {
+  .mobile-full-width {
+    width: 100vw !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  .mobile-hide {
+    display: none !important;
+  }
+
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+}
+
+/* High DPI display fixes */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .high-dpi-fix {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
 }
 
 .\*\:dimmed-space-background-start {

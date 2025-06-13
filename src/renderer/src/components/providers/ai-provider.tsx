@@ -85,6 +85,12 @@ export function AIProvider({ children }: AIProviderProps) {
     setIsAIPanelOpen(prev => {
       const newState = !prev;
       console.log('[AI Provider] Toggle AI Panel:', prev, '->', newState);
+
+      // Send to main process for debugging
+      if (window.electronAPI) {
+        window.electronAPI.send('debug-log', `[AI Provider] Toggle AI Panel: ${prev} -> ${newState}`);
+      }
+
       return newState;
     });
   }, []);

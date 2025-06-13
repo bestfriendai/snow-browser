@@ -142,6 +142,7 @@ function App() {
   return (
     <>
       <title>Snow Games</title>
+      <link rel="icon" type="image/png" href="/assets/icon.png" />
       <Page />
     </>
   );

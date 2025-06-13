@@ -2,6 +2,7 @@ import { BrowserWindow, nativeTheme } from "electron";
 import { registerWindow, WindowType } from "@/modules/windows";
 import { FLAGS } from "@/modules/flags";
 import { defaultSessionReady } from "@/browser/sessions";
+import { PATHS } from "@/modules/paths";
 
 let onboardingWindow: BrowserWindow | null = null;
 
@@ -23,7 +24,13 @@ async function createOnboardingWindow() {
       symbolColor: nativeTheme.shouldUseDarkColors ? "white" : "black",
       color: "rgba(0,0,0,0)"
     },
-    roundedCorners: true
+    roundedCorners: true,
+    webPreferences: {
+      sandbox: true,
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: PATHS.PRELOAD
+    }
   });
 
   window.loadURL("snow-internal://onboarding/");

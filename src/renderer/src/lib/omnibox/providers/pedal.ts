@@ -25,6 +25,11 @@ const PEDALS = [
     triggers: ["extensions", "extension", "extension manager"],
     action: "open_extensions",
     description: "Extensions Manager"
+  },
+  {
+    triggers: ["downloads", "download", "download manager", "files"],
+    action: "open_downloads",
+    description: "Downloads Manager"
   }
 ] satisfies Pedal[];
 

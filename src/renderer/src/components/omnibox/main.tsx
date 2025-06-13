@@ -198,7 +198,7 @@ export function OmniboxMain() {
       ref={containerRef}
     >
       <motion.div
-        className="w-full h-full mx-auto"
+        className="w-full h-full mx-auto flex flex-col min-h-0"
         initial={{ opacity: 0 }}
         animate={{ opacity: isOpen ? 1 : 0 }}
         transition={{ duration: 0.15, ease: "easeInOut" }}
@@ -210,8 +210,8 @@ export function OmniboxMain() {
             "border-[#e0e0e0] dark:border-[#383838]",
             "bg-black/95 dark:bg-black/95",
             "transition-all duration-150",
-            "flex flex-col",
-            matches.length > 0 ? "h-screen" : "max-h-screen"
+            "flex flex-col min-h-0",
+            matches.length > 0 ? "h-full" : "max-h-full"
           )}
           loop
           value={selectedValue}
@@ -246,7 +246,7 @@ export function OmniboxMain() {
 
           {matches.length > 0 && (
             <CommandList
-              className="flex-1 px-1.5 py-2 overflow-y-auto"
+              className="flex-1 px-1.5 py-2 overflow-y-auto min-h-0"
               style={{
                 scrollbarWidth: "thin",
                 scrollbarColor: theme === "dark" ? "rgba(255,255,255,0.2) transparent" : "rgba(0,0,0,0.2) transparent",

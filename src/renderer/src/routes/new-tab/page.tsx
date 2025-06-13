@@ -8,6 +8,7 @@ function App() {
   return (
     <>
       <title>Welcome | Snow Browser</title>
+      <link rel="icon" type="image/png" href="/assets/icon.png" />
       <Page />
     </>
   );

@@ -49,6 +49,7 @@ function App() {
   return (
     <>
       <title>Snow URLs</title>
+      <link rel="icon" type="image/png" href="/assets/icon.png" />
       <Page />
     </>
   );

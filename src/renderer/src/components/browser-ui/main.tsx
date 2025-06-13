@@ -16,6 +16,10 @@ import MinimalToastProvider from "@/components/providers/minimal-toast-provider"
 import { AppUpdatesProvider } from "@/components/providers/app-updates-provider";
 import { ActionsProvider } from "@/components/providers/actions-provider";
 import { SidebarAddressBar } from "@/components/browser-ui/sidebar/header/address-bar/address-bar";
+import { AIProvider, useAI } from "@/components/providers/ai-provider";
+import { AIPanelEnhanced } from "@/components/browser-ui/ai-panel/ai-panel-enhanced";
+import { FloatingAIPanelToggle } from "@/components/browser-ui/ai-panel/ai-panel-toggle";
+import { PortalComponent } from "@/components/portal/portal";
 
 export type CollapseMode = "icon" | "offcanvas";
 export type SidebarVariant = "sidebar" | "floating";
@@ -27,6 +31,15 @@ function InternalBrowserUI({ isReady, type }: { isReady: boolean; type: WindowTy
   const { open, setOpen } = useSidebar();
   const { getSetting } = useSettings();
   const { focusedTab, tabGroups } = useTabs();
+  const { isAIPanelOpen, toggleAIPanel, aiPanelVariant, setAIPanelVariant } = useAI();
+
+  // Debug AI panel state
+  useEffect(() => {
+    console.log('[Main UI] AI Panel State Changed:', { isAIPanelOpen, aiPanelVariant });
+    if (window.electronAPI) {
+      window.electronAPI.send('debug-log', `[Main UI] AI Panel State: isOpen=${isAIPanelOpen}, variant=${aiPanelVariant}`);
+    }
+  }, [isAIPanelOpen, aiPanelVariant]);
 
   const [variant, setVariant] = useState<SidebarVariant>("sidebar");
   const [isHoveringSidebar, setIsHoveringSidebar] = useState(false);
@@ -83,15 +96,16 @@ function InternalBrowserUI({ isReady, type }: { isReady: boolean; type: WindowTy
         {/* Sidebar on Left Side */}
         {hasSidebar && side === "left" && sidebar}
 
-        <SidebarInset className="bg-transparent">
+        <SidebarInset className="bg-transparent flex-1 min-h-0">
           <div
             className={cn(
-              "dark flex-1 flex p-2 app-drag",
+              "dark flex-1 flex p-2 app-drag h-full min-h-0",
               (open || (!open && sidebarCollapseMode === "icon")) &&
                 hasSidebar &&
                 variant === "sidebar" &&
                 (side === "left" ? "pl-0.5" : "pr-0.5"),
-              type === "popup" && "pt-[calc(env(titlebar-area-y)+env(titlebar-area-height))]"
+              type === "popup" && "pt-[calc(env(titlebar-area-y)+env(titlebar-area-height))]",
+              isAIPanelOpen && aiPanelVariant === 'panel' && "ai-panel-open"
             )}
           >
             {/* Topbar */}
@@ -135,15 +149,60 @@ function InternalBrowserUI({ isReady, type }: { isReady: boolean; type: WindowTy
             />
 
             {/* Content */}
-            <div className="flex flex-col flex-1 h-full w-full">
-              <div className="remove-app-drag">{type === "popup" && <SidebarAddressBar className="rounded-lg" />}</div>
-              <BrowserContent />
+            <div
+              className="flex flex-col flex-1 h-full w-full transition-all duration-300 min-h-0 overflow-hidden"
+              style={{
+                marginRight: isAIPanelOpen && aiPanelVariant === 'panel' ? '420px' : '0px'
+              }}
+            >
+              <div className="remove-app-drag flex-shrink-0">
+                {type === "popup" && <SidebarAddressBar className="rounded-lg" />}
+              </div>
+              <div className="flex-1 min-h-0 overflow-hidden">
+                <BrowserContent />
+              </div>
             </div>
           </div>
         </SidebarInset>
 
         {/* Sidebar on Right Side */}
         {hasSidebar && side === "right" && sidebar}
+
+        {/* AI Panel - Render inline for panel variant, use Portal for floating */}
+        {isAIPanelOpen && aiPanelVariant === 'panel' && (
+          <div className="fixed right-0 top-0 h-full w-[420px] z-layer-ai-panel border-l border-gray-200 dark:border-gray-800">
+            <AIPanelEnhanced
+              variant={aiPanelVariant}
+              isOpen={isAIPanelOpen}
+              onToggle={toggleAIPanel}
+              onVariantChange={setAIPanelVariant}
+            />
+          </div>
+        )}
+
+        {/* AI Panel - Use Portal for floating variant */}
+        {isAIPanelOpen && aiPanelVariant === 'floating' && (
+          <PortalComponent
+            x="5vw"
+            y="5vh"
+            width="min(90vw, 420px)"
+            height="min(90vh, 700px)"
+            anchorX="left"
+            zIndex={9999}
+          >
+            <AIPanelEnhanced
+              variant={aiPanelVariant}
+              isOpen={isAIPanelOpen}
+              onToggle={toggleAIPanel}
+              onVariantChange={setAIPanelVariant}
+            />
+          </PortalComponent>
+        )}
+
+        {/* Floating AI Toggle Button */}
+        <div className="z-layer-max">
+          <FloatingAIPanelToggle isOpen={isAIPanelOpen} onToggle={toggleAIPanel} />
+        </div>
       </ActionsProvider>
     </MinimalToastProvider>
   );
@@ -162,7 +221,7 @@ export function BrowserUI({ type }: { type: WindowType }) {
   return (
     <div
       className={cn(
-        "w-screen h-screen",
+        "w-screen h-screen layout-container",
         "bg-black",
         isReady && "transition-colors duration-300"
       )}
@@ -175,7 +234,11 @@ export function BrowserUI({ type }: { type: WindowType }) {
               <BrowserActionProvider>
                 <ExtensionsProviderWithSpaces>
                   <AppUpdatesProvider>
-                    <InternalBrowserUI isReady={isReady} type={type} />
+                    <AIProvider>
+                      <div className="flex-container h-full w-full">
+                        <InternalBrowserUI isReady={isReady} type={type} />
+                      </div>
+                    </AIProvider>
                   </AppUpdatesProvider>
                 </ExtensionsProviderWithSpaces>
               </BrowserActionProvider>

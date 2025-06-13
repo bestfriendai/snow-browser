@@ -23,5 +23,14 @@ import "@/ipc/app/icons";
 import "@/ipc/app/open-external";
 import "@/ipc/app/onboarding";
 
+// AI APIs
+import "@/ipc/ai/handlers";
+
 // Special
 import "@/ipc/listeners-manager";
+
+// Debug logging
+import { ipcMain } from "electron";
+ipcMain.on("debug-log", (event, message) => {
+  console.log("[DEBUG FROM RENDERER]", message);
+});

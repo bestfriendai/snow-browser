@@ -1,6 +1,7 @@
 import { Tab } from "@/browser/tabs/tab";
 import { GlanceTabGroup } from "@/browser/tabs/tab-groups/glance";
 import { SplitTabGroup } from "@/browser/tabs/tab-groups/split";
+import { UserTabGroup } from "@/browser/tabs/tab-groups/user-group";
 import { TabManager } from "@/browser/tabs/tab-manager";
 import { TypedEventEmitter } from "@/modules/typed-event-emitter";
 import { Browser } from "@/browser/browser";
@@ -23,7 +24,7 @@ function getTabFromId(tabManager: TabManager, id: number): Tab | null {
 }
 
 // Tab Group Class
-export type TabGroup = GlanceTabGroup | SplitTabGroup;
+export type TabGroup = GlanceTabGroup | SplitTabGroup | UserTabGroup;
 
 export class BaseTabGroup extends TypedEventEmitter<TabGroupEvents> {
   public readonly id: number;

@@ -27,7 +27,6 @@ export function registerProtocolsWithSession(session: Session) {
 export function registerPreloadScript(session: Session) {
   session.registerPreloadScript({
     id: "snow-preload",
-    type: "frame",
     filePath: PATHS.PRELOAD
   });
 }

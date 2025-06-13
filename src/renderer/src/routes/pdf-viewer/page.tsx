@@ -13,6 +13,7 @@ function Page() {
   return (
     <>
       <title>{url}</title>
+      <link rel="icon" type="image/png" href="/assets/icon.png" />
       <PDFViewerApp pdfFilePath={cacheURL ?? url} />
     </>
   );

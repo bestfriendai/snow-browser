@@ -9,6 +9,17 @@ import { TabbedBrowserWindow } from "@/browser/window";
 import "@/modules/auto-update";
 import "@/modules/posthog";
 import "@/modules/content-blocker";
+import "@/modules/download-manager";
+import "@/modules/reading-mode";
+import "@/modules/screenshot-tool";
+import "@/modules/focus-mode";
+import "@/modules/password-manager";
+import "@/modules/custom-css";
+import "@/modules/enhanced-bookmarks";
+import "@/modules/enhanced-history";
+import "@/ipc/downloads";
+import "@/ipc/reading-mode";
+import "@/ipc/screenshot";
 import { debugPrint } from "@/modules/output";
 
 export let browser: Browser | null = null;

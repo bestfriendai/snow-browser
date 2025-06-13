@@ -21,6 +21,7 @@ import { PortalComponent } from "@/components/portal/portal";
 import { SidebarWindowControls } from "@/components/browser-ui/sidebar/header/window-controls";
 import { motion, AnimatePresence } from "motion/react";
 import { SidebarFooterUpdate } from "@/components/browser-ui/sidebar/footer/update";
+import { SidebarToolsMenu } from "@/components/browser-ui/sidebar/footer/tools-menu";
 
 type BrowserSidebarProps = {
   collapseMode: CollapseMode;
@@ -106,11 +107,7 @@ function SidebarFooterContent() {
         <SidebarSpacesSwitcher />
 
         {/* Right Side Buttons */}
-        <SidebarMenuItem>
-          <SidebarMenuButton disabled className={cn(SIDEBAR_HOVER_COLOR, "text-black dark:text-white")}>
-            <PlusIcon />
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+        <SidebarToolsMenu />
       </SidebarMenu>
     </>
   );
@@ -218,6 +215,7 @@ export function BrowserSidebar({ collapseMode, variant, side, setIsHoveringSideb
     "select-none",
     "!border-0",
     "*:bg-transparent",
+    "relative z-[999998]", // Ensure sidebar is above webview content
     variant === "floating" && "!w-full !flex *:dimmed-space-background-start"
   );
 
@@ -268,6 +266,7 @@ export function BrowserSidebar({ collapseMode, variant, side, setIsHoveringSideb
         width={width}
         height="100%"
         anchorX={side === "left" ? "left" : "right"}
+        zIndex={999998} // Ensure floating sidebar is above webview content
       >
         {sidebarContent}
       </PortalComponent>

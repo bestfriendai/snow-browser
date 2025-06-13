@@ -6,6 +6,7 @@ import { createAppMenu } from "./menu/items/app";
 import { createFileMenu } from "./menu/items/file";
 import { createEditMenu } from "./menu/items/edit";
 import { createViewMenu } from "./menu/items/view";
+import { createToolsMenu } from "./menu/items/tools";
 import { createArchiveMenu } from "./menu/items/archive";
 import { createWindowMenu } from "./menu/items/window";
 import { createSpacesMenu } from "@/browser/utility/menu/items/spaces";
@@ -22,6 +23,7 @@ export const setupMenu = (browser: Browser) => {
       createFileMenu(browser),
       createEditMenu(),
       createViewMenu(browser),
+      createToolsMenu(browser),
       await createSpacesMenu(),
       createArchiveMenu(browser),
       createWindowMenu()

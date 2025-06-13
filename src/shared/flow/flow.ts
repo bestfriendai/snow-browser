@@ -20,6 +20,8 @@ import { FlowOnboardingAPI } from "~/flow/interfaces/settings/onboarding";
 import { FlowUpdatesAPI } from "~/flow/interfaces/app/updates";
 import { FlowActionsAPI } from "~/flow/interfaces/app/actions";
 import { FlowShortcutsAPI } from "~/flow/interfaces/app/shortcuts";
+import { FlowDownloadsAPI } from "~/flow/interfaces/downloads";
+import { FlowAIAPI } from "~/flow/interfaces/ai/ai";
 
 declare global {
   /**
@@ -53,5 +55,11 @@ declare global {
     icons: FlowIconsAPI;
     openExternal: FlowOpenExternalAPI;
     onboarding: FlowOnboardingAPI;
+
+    // Downloads API
+    downloads: FlowDownloadsAPI;
+
+    // AI API
+    ai: FlowAIAPI;
   };
 }

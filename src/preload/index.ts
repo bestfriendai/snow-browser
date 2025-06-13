@@ -35,6 +35,8 @@ import { FlowTabsAPI } from "~/flow/interfaces/browser/tabs";
 import { FlowUpdatesAPI } from "~/flow/interfaces/app/updates";
 import { FlowActionsAPI } from "~/flow/interfaces/app/actions";
 import { FlowShortcutsAPI, ShortcutsData } from "~/flow/interfaces/app/shortcuts";
+import { FlowDownloadsAPI, DownloadInfo } from "~/flow/interfaces/downloads";
+import { FlowAIAPI, AIChatRequest, AIChatResponse, AIValidationResult, AIModel } from "~/flow/interfaces/ai/ai";
 
 // API CHECKS //
 function isProtocol(protocol: string) {
@@ -478,6 +480,44 @@ const onboardingAPI: FlowOnboardingAPI = {
   }
 };
 
+// DOWNLOADS API //
+const downloadsAPI: FlowDownloadsAPI = {
+  getAll: async () => {
+    return ipcRenderer.invoke("downloads:get-all");
+  },
+  get: async (id: string) => {
+    return ipcRenderer.invoke("downloads:get", id);
+  },
+  remove: async (id: string) => {
+    return ipcRenderer.invoke("downloads:remove", id);
+  },
+  clearCompleted: async () => {
+    return ipcRenderer.invoke("downloads:clear-completed");
+  },
+  open: async (id: string) => {
+    return ipcRenderer.invoke("downloads:open", id);
+  },
+  showInFolder: async (id: string) => {
+    return ipcRenderer.invoke("downloads:show-in-folder", id);
+  },
+  getProgress: async (id: string) => {
+    return ipcRenderer.invoke("downloads:get-progress", id);
+  },
+  getSpeed: async (id: string) => {
+    return ipcRenderer.invoke("downloads:get-speed", id);
+  },
+  formatFileSize: async (bytes: number) => {
+    return ipcRenderer.invoke("downloads:format-file-size", bytes);
+  },
+  formatSpeed: async (bytesPerSecond: number) => {
+    return ipcRenderer.invoke("downloads:format-speed", bytesPerSecond);
+  },
+  onChanged: (callback: (downloads: DownloadInfo[]) => void) => {
+    ipcRenderer.invoke("downloads:listen");
+    return listenOnIPCChannel("downloads:changed", callback);
+  }
+};
+
 // OMNIBOX API //
 const omniboxAPI: FlowOmniboxAPI = {
   show: (bounds: Electron.Rectangle | null, params: { [key: string]: string } | null) => {
@@ -581,6 +621,49 @@ const shortcutsAPI: FlowShortcutsAPI = {
   }
 };
 
+// AI API //
+const aiAPI: FlowAIAPI = {
+  sendMessage: async (request: AIChatRequest): Promise<AIChatResponse> => {
+    return ipcRenderer.invoke("ai:send-message", request);
+  },
+  sendMessageStream: async (request: AIChatRequest): Promise<void> => {
+    return ipcRenderer.invoke("ai:send-message-stream", request);
+  },
+  onStreamChunk: (callback: (chunk: string) => void) => {
+    return listenOnIPCChannel("ai:stream-chunk", callback);
+  },
+  onStreamComplete: (callback: (usage?: any) => void) => {
+    return listenOnIPCChannel("ai:stream-complete", callback);
+  },
+  onStreamError: (callback: (error: string) => void) => {
+    return listenOnIPCChannel("ai:stream-error", callback);
+  },
+  validateApiKey: async (apiKey: string): Promise<AIValidationResult> => {
+    return ipcRenderer.invoke("ai:validate-api-key", apiKey);
+  },
+  getModels: async (apiKey: string): Promise<AIModel[]> => {
+    return ipcRenderer.invoke("ai:get-models", apiKey);
+  },
+  saveApiKey: async (apiKey: string): Promise<boolean> => {
+    return ipcRenderer.invoke("ai:save-api-key", apiKey);
+  },
+  getApiKey: async (): Promise<string | null> => {
+    return ipcRenderer.invoke("ai:get-api-key");
+  },
+  removeApiKey: async (): Promise<boolean> => {
+    return ipcRenderer.invoke("ai:remove-api-key");
+  },
+  captureTabScreenshot: async (tabId: string): Promise<string> => {
+    return ipcRenderer.invoke("ai:capture-tab-screenshot", tabId);
+  },
+  extractPageContent: async (tabId: string): Promise<string> => {
+    return ipcRenderer.invoke("ai:extract-page-content", tabId);
+  },
+  getPageMetadata: async (tabId: string): Promise<{title: string, description: string, url: string, text: string}> => {
+    return ipcRenderer.invoke("ai:get-page-metadata", tabId);
+  }
+};
+
 // EXPOSE FLOW API //
 const flowAPI: typeof flow = {
   // App APIs
@@ -620,6 +703,12 @@ const flowAPI: typeof flow = {
   settings: wrapAPI(settingsAPI, "settings"),
   icons: wrapAPI(iconsAPI, "settings"),
   openExternal: wrapAPI(openExternalAPI, "settings"),
-  onboarding: wrapAPI(onboardingAPI, "settings")
+  onboarding: wrapAPI(onboardingAPI, "settings"),
+
+  // Downloads API
+  downloads: wrapAPI(downloadsAPI, "app"),
+
+  // AI API
+  ai: wrapAPI(aiAPI, "app")
 };
 contextBridge.exposeInMainWorld("flow", flowAPI);

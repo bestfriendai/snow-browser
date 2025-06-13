@@ -18,10 +18,11 @@ function BrowserContent() {
       const dimensions: PageBounds = {
         x: rect.left,
         y: rect.top,
-        width: rect.width,
+        width: rect.width, // Use actual container width (already adjusted by parent margin)
         height: rect.height
       };
       flow.page.setPageBounds(dimensions);
+      console.log('[Browser Content] Page bounds updated:', dimensions, 'Container rect:', rect);
     }
   }, [rect]);
 
@@ -30,7 +31,7 @@ function BrowserContent() {
       ref={containerRef}
       className={cn(
         "rounded-lg",
-        "dark flex-1 relative remove-app-drag",
+        "dark flex-1 relative remove-app-drag h-full w-full min-h-0 overflow-hidden",
         activeTabId > 0 ? "bg-transparent border-0 ring-0 shadow-none" : "bg-transparent"
       )}
     >
@@ -47,7 +48,7 @@ function BrowserContent() {
           <motion.div
             key={`webview-container-${activeTabId}`}
             id={`webview-container-${activeTabId}`}
-            className="w-full h-full"
+            className="w-full h-full min-h-0 overflow-hidden"
             data-active-tab-id={activeTabId}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -60,7 +61,7 @@ function BrowserContent() {
           // Show default page when no tab is active
           <motion.div
             key="default-page"
-            className="w-full h-full flex items-center justify-center"
+            className="w-full h-full flex items-center justify-center min-h-0 overflow-hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

@@ -622,6 +622,8 @@ export function AIPanelEnhanced({ variant, isOpen, onToggle }: AIPanelEnhancedPr
   );
 
   // Always render the AnimatePresence container to handle animations properly
+  console.log('[AI Panel Enhanced] Rendering with isOpen:', isOpen, 'variant:', variant);
+
   return (
     <>
       <AnimatePresence mode="wait">
@@ -656,29 +658,41 @@ export function AIPanelEnhanced({ variant, isOpen, onToggle }: AIPanelEnhancedPr
               'bg-red-950/98 text-white',
               // Ensure pointer events work properly
               'pointer-events-auto',
+              // Force visibility and interaction
+              'relative',
 
               // Variant-specific positioning, sizing, and borders
               {
-                // Panel Variant Styles - Enhanced positioning and responsive design
-                'fixed top-0 right-0 h-screen border-l border-red-800/50': variant === 'panel',
-                // Fixed width for panel variant to ensure consistent layout
-                [variant === 'panel' ? 'w-[420px]' : '']: true,
-                [isMinimized && variant === 'panel' ? 'w-[60px]' : '']: true,
+                // Panel Variant Styles - Use full container when in Portal
+                'h-full border-l border-red-800/50': variant === 'panel',
+                // Full width and height when in Portal
+                'w-full h-full min-h-0 overflow-hidden': variant === 'panel' && !isMinimized,
+                'w-[60px] h-full': isMinimized && variant === 'panel',
 
                 // Floating Variant Styles - Enhanced with red theme
-                'fixed bottom-4 right-4 rounded-xl shadow-2xl border border-red-800/50': variant === 'floating',
-                // Improved floating size handling
-                [isMinimized && variant === 'floating' ? 'w-[60px] h-[60px]' :
-                 variant === 'floating' ? 'w-[90vw] max-w-[420px] h-[70vh] max-h-[700px] min-h-[500px]' : '']: true,
+                'rounded-xl shadow-2xl border border-red-800/50': variant === 'floating',
+                // Improved floating size handling with proper constraints
+                'w-[60px] h-[60px]': isMinimized && variant === 'floating',
+                'w-full h-full max-w-[420px] max-h-[700px] min-h-[500px]': !isMinimized && variant === 'floating',
               }
             )}
             style={{
-              // Use the highest possible z-index to ensure it's above webview content
-              zIndex: 2147483647, // Maximum safe z-index value
-              // Create a new stacking context
-              isolation: 'isolate',
-              // Ensure it's positioned relative to the viewport, not any parent
-              position: 'fixed'
+              // When in Portal, use relative positioning
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              minHeight: 0,
+              // Ensure visibility and interaction
+              pointerEvents: 'auto',
+              visibility: 'visible',
+              display: 'flex',
+              overflow: 'hidden'
+            }}
+            onAnimationComplete={() => {
+              console.log('[AI Panel Enhanced] Animation complete, panel should be visible');
+              if (window.electronAPI) {
+                window.electronAPI.send('debug-log', `[AI Panel Enhanced] Panel rendered with variant: ${variant}, isOpen: ${isOpen}`);
+              }
             }}
           >
             {/* Header - Enhanced with red theme */}

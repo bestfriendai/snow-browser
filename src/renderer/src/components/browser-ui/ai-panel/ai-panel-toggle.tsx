@@ -17,6 +17,13 @@ export function AIPanelToggle({ isOpen, onToggle, className, variant = 'default'
     e.preventDefault();
     e.stopPropagation();
     console.log('[AI Toggle] Button clicked, current state:', isOpen);
+    console.log('[AI Toggle] onToggle function:', onToggle);
+
+    // Send to main process for debugging
+    if (window.electronAPI) {
+      window.electronAPI.send('debug-log', `[AI Toggle] Button clicked, isOpen: ${isOpen}`);
+    }
+
     onToggle();
   }, [isOpen, onToggle]);
 
@@ -28,7 +35,7 @@ export function AIPanelToggle({ isOpen, onToggle, className, variant = 'default'
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.1 }}
-            style={{ zIndex: 10000 }}
+            className="z-layer-max relative pointer-events-auto"
           >
             <Button
               variant={variant === 'floating' ? 'default' : 'ghost'}
@@ -41,7 +48,11 @@ export function AIPanelToggle({ isOpen, onToggle, className, variant = 'default'
                 isOpen && variant === 'default' && 'bg-gradient-to-r from-red-100 to-red-200 text-red-700 dark:from-red-900/40 dark:to-red-800/40 dark:text-red-300',
                 className
               )}
-              style={{ zIndex: 10001 }}
+              style={{
+                zIndex: 999999,
+                position: 'relative',
+                pointerEvents: 'auto'
+              }}
             >
               <Bot className={cn(
                 "w-4 h-4 transition-all duration-200",
@@ -81,8 +92,7 @@ export function FloatingAIPanelToggle({ isOpen, onToggle }: Pick<AIPanelTogglePr
       animate={{ opacity: 1, scale: 1, x: 0 }}
       exit={{ opacity: 0, scale: 0.8, x: 20 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="fixed bottom-6 right-6 pointer-events-auto"
-      style={{ zIndex: 2147483647 }} // Maximum z-index to ensure it's always visible
+      className="fixed bottom-6 right-6 pointer-events-auto z-layer-max"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >

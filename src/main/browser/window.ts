@@ -5,7 +5,7 @@ import { PageBounds } from "@/ipc/browser/page";
 import { FLAGS } from "@/modules/flags";
 import { TypedEventEmitter } from "@/modules/typed-event-emitter";
 import { getLastUsedSpace } from "@/sessions/spaces";
-import { BrowserWindow, nativeTheme, WebContents } from "electron";
+import { BrowserWindow, nativeTheme, WebContents, session } from "electron";
 import "./close-preventer";
 import { WindowEventType } from "@/modules/windows";
 import { windowEvents } from "@/modules/windows";
@@ -13,6 +13,7 @@ import { initializePortalComponentWindows } from "@/browser/components/portal-co
 import { defaultSessionReady } from "@/browser/sessions";
 import { fireWindowStateChanged } from "@/ipc/browser/interface";
 import { debugPrint } from "@/modules/output";
+import { PATHS } from "@/modules/paths";
 
 type BrowserWindowType = "normal" | "popup";
 
@@ -61,7 +62,9 @@ export class TabbedBrowserWindow extends TypedEventEmitter<BrowserWindowEvents> 
       webPreferences: {
         sandbox: true,
         nodeIntegration: false,
-        contextIsolation: true
+        contextIsolation: true,
+        preload: PATHS.PRELOAD,
+        session: session.defaultSession
       },
       title: "Flow",
       frame: false,

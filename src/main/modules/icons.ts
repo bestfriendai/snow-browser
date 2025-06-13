@@ -26,6 +26,16 @@ type IconData = {
 
 export const icons = [
   {
+    id: "snow_logo",
+    name: "Snow Browser",
+    image_id: "snow_logo.png"
+  },
+  {
+    id: "snow_logo_alt",
+    name: "Snow Browser (Alt)",
+    image_id: "snow_logo_alt.png"
+  },
+  {
     id: "default",
     name: "Default",
     image_id: "default.png"
@@ -115,6 +125,7 @@ async function transformAppIcon(imagePath: string): Promise<Buffer> {
 
 function generateIconPath(iconId: string) {
   const imagePath = path.join(iconsDirectory, `${iconId}.png`);
+  console.log("ICONS DEBUG: Generated icon path:", imagePath);
   debugPrint("ICONS", "Generated icon path:", imagePath);
   return imagePath;
 }
@@ -143,6 +154,7 @@ function updateAppIcon() {
 }
 
 export async function setAppIcon(iconId: string) {
+  console.log("ICONS DEBUG: Attempting to set app icon to:", iconId);
   debugPrint("ICONS", "Attempting to set app icon to:", iconId);
   const imagePath = generateIconPath(iconId);
 
@@ -172,7 +184,7 @@ export async function setAppIcon(iconId: string) {
   }
 }
 
-setAppIcon("default").catch((error) => {
+setAppIcon("snow_logo").catch((error) => {
   debugError("ICONS", "Failed initial setAppIcon call:", error);
 });
 
@@ -187,7 +199,7 @@ windowEvents.on(WindowEventType.ADDED, (id) => {
 });
 
 // Settings: Current Icon //
-let currentIconId: IconId = "default";
+let currentIconId: IconId = "snow_logo";
 
 async function cacheCurrentIcon() {
   debugPrint("ICONS", "Caching current icon from settings.");
@@ -196,9 +208,9 @@ async function cacheCurrentIcon() {
     debugPrint("ICONS", "Retrieved icon ID from settings:", iconId);
 
     if (!iconId) {
-      currentIconId = "default";
+      currentIconId = "snow_logo";
       await setAppIcon(currentIconId);
-      debugPrint("ICONS", "Set icon to default due to no icon ID found.");
+      debugPrint("ICONS", "Set icon to snow_logo due to no icon ID found.");
       return;
     }
 
@@ -210,14 +222,14 @@ async function cacheCurrentIcon() {
     } else {
       debugError("ICONS", "Failed to parse icon ID from settings:", iconId, parseResult.error);
       // Optionally set a default icon if parsing fails
-      currentIconId = "default";
+      currentIconId = "snow_logo";
       await setAppIcon(currentIconId);
-      debugPrint("ICONS", "Set icon to default due to parsing error.");
+      debugPrint("ICONS", "Set icon to snow_logo due to parsing error.");
     }
   } catch (error) {
-    debugError("ICONS", "Error retrieving currentIcon from settings, using default:", error);
+    debugError("ICONS", "Error retrieving currentIcon from settings, using snow_logo:", error);
     // Use default value if error raised during retrieval
-    currentIconId = "default";
+    currentIconId = "snow_logo";
     await setAppIcon(currentIconId);
   }
 }

@@ -187,6 +187,7 @@ function App() {
   return (
     <>
       <title>Extensions</title>
+      <link rel="icon" type="image/png" href="/assets/icon.png" />
       <ExtensionsProvider>
         <ExtensionsPage />
       </ExtensionsProvider>

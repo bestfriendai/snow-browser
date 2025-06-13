@@ -224,6 +224,101 @@ export const BasicSettings: BasicSetting[] = [
     showName: true,
     type: "boolean",
     defaultValue: false
+  },
+
+  // Download Location
+  {
+    id: "downloadLocation",
+    name: "Download Location",
+    showName: true,
+    type: "string",
+    defaultValue: ""
+  },
+
+  // Ask Download Location
+  {
+    id: "askDownloadLocation",
+    name: "Ask where to save each file before downloading",
+    showName: true,
+    type: "boolean",
+    defaultValue: false
+  },
+
+  // Reading Mode
+  {
+    id: "enableReadingMode",
+    name: "Enable Reading Mode",
+    showName: true,
+    type: "boolean",
+    defaultValue: true
+  },
+
+  // Focus Mode
+  {
+    id: "enableFocusMode",
+    name: "Enable Focus Mode",
+    showName: true,
+    type: "boolean",
+    defaultValue: true
+  },
+
+  // Tab Grouping
+  {
+    id: "enableTabGrouping",
+    name: "Enable Tab Grouping",
+    showName: true,
+    type: "boolean",
+    defaultValue: true
+  },
+
+  // Auto-save Sessions
+  {
+    id: "autoSaveSessions",
+    name: "Automatically save browsing sessions",
+    showName: true,
+    type: "boolean",
+    defaultValue: true
+  },
+
+  // Screenshot Quality
+  {
+    id: "screenshotQuality",
+    name: "Screenshot Quality",
+    showName: true,
+    type: "enum",
+    defaultValue: "high",
+    options: [
+      {
+        id: "low",
+        name: "Low (Faster)"
+      },
+      {
+        id: "medium",
+        name: "Medium"
+      },
+      {
+        id: "high",
+        name: "High (Better Quality)"
+      }
+    ]
+  },
+
+  // Custom CSS
+  {
+    id: "enableCustomCSS",
+    name: "Enable Custom CSS Injection",
+    showName: true,
+    type: "boolean",
+    defaultValue: false
+  },
+
+  // Developer Mode
+  {
+    id: "developerMode",
+    name: "Developer Mode",
+    showName: true,
+    type: "boolean",
+    defaultValue: false
   }
 ];
 
@@ -260,7 +355,21 @@ export const BasicSettingCards: BasicSettingCard[] = [
   {
     title: "Performance Settings",
     subtitle: "Settings to improve performance",
-    settings: ["archiveTabAfter", "sleepTabAfter"]
+    settings: ["archiveTabAfter", "sleepTabAfter", "autoSaveSessions"]
+  },
+
+  // Downloads Settings Card
+  {
+    title: "Downloads",
+    subtitle: "Configure download behavior",
+    settings: ["downloadLocation", "askDownloadLocation"]
+  },
+
+  // Features Settings Card
+  {
+    title: "Browser Features",
+    subtitle: "Enable or disable browser features",
+    settings: ["enableReadingMode", "enableFocusMode", "enableTabGrouping", "screenshotQuality"]
   },
 
   // Onboarding Card (Internal)
@@ -274,13 +383,13 @@ export const BasicSettingCards: BasicSettingCard[] = [
   {
     title: "Experimental Settings",
     subtitle: "Experimental settings for Snow",
-    settings: ["enableFlowPdfViewer"]
+    settings: ["enableFlowPdfViewer", "enableCustomCSS"]
   },
 
   // Advanced Settings Card
   {
     title: "Advanced Settings",
     subtitle: "Power users only (Some settings may require a restart)",
-    settings: ["enableMv2Extensions"]
+    settings: ["enableMv2Extensions", "developerMode"]
   }
 ];
