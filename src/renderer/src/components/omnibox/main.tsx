@@ -9,6 +9,7 @@ import { motion } from "motion/react";
 import { CommandInput } from "cmdk";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/main/theme";
+import { usePlatformWithoutThrow } from "@/components/main/platform";
 
 const SHOW_INSTRUCTIONS = true;
 
@@ -75,6 +76,7 @@ export function OmniboxMain() {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
   const { appliedTheme: theme } = useTheme();
+  const platformData = usePlatformWithoutThrow();
 
   // Track window height for responsive sizing
   useEffect(() => {
@@ -194,7 +196,10 @@ export function OmniboxMain() {
 
   return (
     <div
-      className="flex flex-col justify-start items-center min-h-screen max-h-screen w-full overflow-hidden"
+      className={cn(
+        "flex flex-col justify-start items-center min-h-screen max-h-screen w-full overflow-hidden omnibox",
+        platformData?.platformClassName
+      )}
       ref={containerRef}
     >
       <motion.div

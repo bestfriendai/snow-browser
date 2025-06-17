@@ -465,6 +465,84 @@ body.electron {
   z-index: 0;
 }
 
+/* Platform-specific fixes */
+
+/* Windows-specific layout fixes */
+.platform-win32 {
+  /* Windows titlebar handling */
+  --titlebar-height: 30px;
+}
+
+.platform-win32 .main-content {
+  /* Account for Windows titlebar overlay */
+  padding-top: env(titlebar-area-height, 30px);
+}
+
+.platform-win32 .ai-panel {
+  /* Adjust AI panel for Windows titlebar */
+  top: env(titlebar-area-height, 30px) !important;
+  height: calc(100vh - env(titlebar-area-height, 30px)) !important;
+}
+
+.platform-win32 .sidebar {
+  /* Adjust sidebar for Windows titlebar */
+  top: env(titlebar-area-height, 30px);
+  height: calc(100vh - env(titlebar-area-height, 30px));
+}
+
+.platform-win32 .omnibox {
+  /* Adjust omnibox positioning for Windows */
+  top: calc(50vh - 175px + env(titlebar-area-height, 15px));
+}
+
+/* macOS-specific layout fixes */
+.platform-darwin {
+  --titlebar-height: 28px;
+}
+
+.platform-darwin .main-content {
+  /* Account for macOS traffic lights */
+  padding-top: env(titlebar-area-height, 28px);
+}
+
+.platform-darwin .ai-panel {
+  /* Adjust AI panel for macOS titlebar */
+  top: env(titlebar-area-height, 28px) !important;
+  height: calc(100vh - env(titlebar-area-height, 28px)) !important;
+}
+
+/* Linux-specific layout fixes */
+.platform-linux {
+  --titlebar-height: 30px;
+}
+
+.platform-linux .main-content {
+  /* Account for Linux titlebar */
+  padding-top: env(titlebar-area-height, 30px);
+}
+
+.platform-linux .ai-panel {
+  /* Adjust AI panel for Linux titlebar */
+  top: env(titlebar-area-height, 30px) !important;
+  height: calc(100vh - env(titlebar-area-height, 30px)) !important;
+}
+
+/* Windows-specific scrollbar styling */
+.platform-win32 .ai-panel-scroll::-webkit-scrollbar {
+  width: 8px; /* Slightly wider on Windows */
+}
+
+.platform-win32 .ai-panel-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(239, 68, 68, 0.7);
+  border-radius: 4px;
+}
+
+/* Windows DPI scaling fixes */
+.platform-win32.high-dpi {
+  zoom: 1;
+  transform: scale(1);
+}
+
 /* Mobile-specific fixes */
 @media (max-width: 768px) {
   .mobile-full-width {
@@ -480,6 +558,12 @@ body.electron {
   .mobile-stack {
     flex-direction: column !important;
   }
+
+  /* Platform-specific mobile adjustments */
+  .platform-win32 .mobile-ai-panel {
+    top: 0 !important;
+    height: 100vh !important;
+  }
 }
 
 /* High DPI display fixes */
@@ -487,6 +571,12 @@ body.electron {
   .high-dpi-fix {
     transform: translateZ(0);
     backface-visibility: hidden;
+  }
+
+  /* Windows-specific high DPI fixes */
+  .platform-win32 .high-dpi-fix {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
 }
 

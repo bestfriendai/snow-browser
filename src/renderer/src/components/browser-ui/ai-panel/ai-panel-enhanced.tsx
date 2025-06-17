@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAI, useAISettings, useAIChat } from '@/components/providers/ai-provider';
+import { usePlatformWithoutThrow } from '@/components/main/platform';
 // Global flow API types
 declare global {
   interface Window {
@@ -63,6 +64,8 @@ export function AIPanelEnhanced({ variant, isOpen, onToggle }: AIPanelEnhancedPr
   const [isMinimized, setIsMinimized] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
   const [currentPageInfo, setCurrentPageInfo] = useState<{url: string, title: string} | null>(null);
+
+  const platformData = usePlatformWithoutThrow();
 
   // Debug logging
   useEffect(() => {
@@ -660,6 +663,8 @@ export function AIPanelEnhanced({ variant, isOpen, onToggle }: AIPanelEnhancedPr
               'pointer-events-auto',
               // Force visibility and interaction
               'relative',
+              // Platform-specific styling
+              platformData?.platformClassName,
 
               // Variant-specific positioning, sizing, and borders
               {

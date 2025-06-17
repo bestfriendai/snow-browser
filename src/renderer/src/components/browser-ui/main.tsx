@@ -9,6 +9,7 @@ import { useState } from "react";
 import { TabsProvider, useTabs } from "@/components/providers/tabs-provider";
 import { SettingsProvider, useSettings } from "@/components/providers/settings-provider";
 import { TabDisabler } from "@/components/logic/tab-disabler";
+import { PlatformProvider, usePlatform } from "@/components/main/platform";
 import { BrowserActionProvider } from "@/components/providers/browser-action-provider";
 import { ExtensionsProviderWithSpaces } from "@/components/providers/extensions-provider";
 import { SidebarHoverDetector } from "@/components/browser-ui/sidebar/hover-detector";
@@ -32,6 +33,7 @@ function InternalBrowserUI({ isReady, type }: { isReady: boolean; type: WindowTy
   const { getSetting } = useSettings();
   const { focusedTab, tabGroups } = useTabs();
   const { isAIPanelOpen, toggleAIPanel, aiPanelVariant, setAIPanelVariant } = useAI();
+  const { platform, platformClassName } = usePlatform();
 
   // Debug AI panel state
   useEffect(() => {
@@ -99,13 +101,14 @@ function InternalBrowserUI({ isReady, type }: { isReady: boolean; type: WindowTy
         <SidebarInset className="bg-transparent flex-1 min-h-0">
           <div
             className={cn(
-              "dark flex-1 flex p-2 app-drag h-full min-h-0",
+              "dark flex-1 flex p-2 app-drag h-full min-h-0 main-content",
               (open || (!open && sidebarCollapseMode === "icon")) &&
                 hasSidebar &&
                 variant === "sidebar" &&
                 (side === "left" ? "pl-0.5" : "pr-0.5"),
               type === "popup" && "pt-[calc(env(titlebar-area-y)+env(titlebar-area-height))]",
-              isAIPanelOpen && aiPanelVariant === 'panel' && "ai-panel-open"
+              isAIPanelOpen && aiPanelVariant === 'panel' && "ai-panel-open",
+              platformClassName
             )}
           >
             {/* Topbar */}
@@ -170,7 +173,10 @@ function InternalBrowserUI({ isReady, type }: { isReady: boolean; type: WindowTy
 
         {/* AI Panel - Render inline for panel variant, use Portal for floating */}
         {isAIPanelOpen && aiPanelVariant === 'panel' && (
-          <div className="fixed right-0 top-0 h-full w-[420px] z-layer-ai-panel border-l border-gray-200 dark:border-gray-800">
+          <div className={cn(
+            "fixed right-0 top-0 h-full w-[420px] z-layer-ai-panel border-l border-gray-200 dark:border-gray-800 ai-panel",
+            platformClassName
+          )}>
             <AIPanelEnhanced
               variant={aiPanelVariant}
               isOpen={isAIPanelOpen}
@@ -227,25 +233,27 @@ export function BrowserUI({ type }: { type: WindowType }) {
       )}
     >
       <TabDisabler />
-      <SidebarProvider>
-        <SettingsProvider>
-          <SpacesProvider windowType={type}>
-            <TabsProvider>
-              <BrowserActionProvider>
-                <ExtensionsProviderWithSpaces>
-                  <AppUpdatesProvider>
-                    <AIProvider>
-                      <div className="flex-container h-full w-full">
-                        <InternalBrowserUI isReady={isReady} type={type} />
-                      </div>
-                    </AIProvider>
-                  </AppUpdatesProvider>
-                </ExtensionsProviderWithSpaces>
-              </BrowserActionProvider>
-            </TabsProvider>
-          </SpacesProvider>
-        </SettingsProvider>
-      </SidebarProvider>
+      <PlatformProvider>
+        <SidebarProvider>
+          <SettingsProvider>
+            <SpacesProvider windowType={type}>
+              <TabsProvider>
+                <BrowserActionProvider>
+                  <ExtensionsProviderWithSpaces>
+                    <AppUpdatesProvider>
+                      <AIProvider>
+                        <div className="flex-container h-full w-full">
+                          <InternalBrowserUI isReady={isReady} type={type} />
+                        </div>
+                      </AIProvider>
+                    </AppUpdatesProvider>
+                  </ExtensionsProviderWithSpaces>
+                </BrowserActionProvider>
+              </TabsProvider>
+            </SpacesProvider>
+          </SettingsProvider>
+        </SidebarProvider>
+      </PlatformProvider>
     </div>
   );
 }
